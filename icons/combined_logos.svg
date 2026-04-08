@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4096 1750" width="4096" height="1750">
+  <!-- Background -->
+  <rect width="4096" height="1750" fill="#ded6f6"/>
+  
+  <!-- Position 1: CoreHexa (left) -->
+  <g transform="translate(256, 363)">
+    <svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+          <radialGradient id="gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="100%" stop-color="#e4e4e4"/>
+          </radialGradient>
+          <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4548ee"/>
+              <stop offset="100%" stop-color="#9a77ee"/>
+          </linearGradient>
+          <radialGradient id="gradient3">
+              <stop offset="0%" stop-color="#4548ee"/>
+              <stop offset="100%" stop-color="#9a77ee"/>
+          </radialGradient>
+      </defs>
+          <rect width="1024" height="1024" fill="white"/>
+          <polygon
+              points="62,512 287,122.29 737,122.29 962,512 737,901.71 287,901.71"
+              fill="none"
+              stroke="url(#gradient2)"
+              stroke-width="60" 
+          />
+          
+          <polygon
+              points="262,512 387,295.49 637,295.49 762,512 637,728.51 387,728.51"
+              transform="rotate(30, 512, 512)"
+              fill="url(#gradient2)"
+              stroke="url(#gradient2)"
+              stroke-width="70" 
+          />
+
+          <line x1="512" x2="800" y1="512" y2="512" stroke="white" stroke-width="70" transform="rotate(-30, 512, 512)"/>
+          <line x1="512" x2="800" y1="512" y2="512" stroke="white" stroke-width="70" transform="rotate(90, 512, 512)"/>
+          <line x1="512" x2="800" y1="512" y2="512" stroke="white" stroke-width="70" transform="rotate(-150, 512, 512)"/>
+
+          <polygon
+              points="162,512 337,208.89 687,208.89 862,512 687,815.11 337,815.11"
+              transform="rotate(15, 512, 512)"
+              fill="none"
+              stroke="url(#gradient2)"
+              stroke-width="65" 
+          />
+      </svg>
+  </g>
+  
+  <!-- Position 2: Team Monokhrom v1 (center) -->
+  <g transform="translate(1536, 363)">
+    <svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1024" height="380" fill="white" />
+    <rect y="380" width="1024" height="684" fill="black" />
+
+    <text fill="black" font-size="200" font-family="Source Han Sans" x="150" y="340" text-anchor="left" font-weight="800">
+        Team
+    </text>
+    <text fill="white" font-size="200" font-family="Source Han Sans" x="150" y="580" text-anchor="left" font-weight="800">
+        Mono
+    </text>
+    <text fill="white" font-size="200" font-family="Source Han Sans" x="150" y="790" text-anchor="left" font-weight="800">
+        Khrom
+    </text>
+    </svg>
+  </g>
+  
+  <!-- Position 3: Team Monokhrom v2 (right) -->
+  <g transform="translate(2816, 363)">
+    <svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+          <clipPath id="cut">
+              <rect x="0" y="0" width="625" height="250" />
+          </clipPath>
+          <clipPath id="cut2">
+              <polygon points="0,0 0,250 625,250" />
+          </clipPath>
+      </defs>
+      <g transform="translate(68.595,256)">
+          <g transform="matrix(0.709, 0.410, -1.774, 1.024, 443.405, -256)">
+              <g>
+                  <rect width="625" height="250" fill="black"/>
+                  <text x="48" y="200" fill="white" font-size="200" font-family="Source Han Sans" text-anchor="start" font-weight="800" letter-spacing="-5px">
+                      Team
+                  </text>
+              </g>
+              <g clip-path="url(#cut2)">
+                  <rect width="625" height="250" fill="white"/>
+                  <text x="48" y="200" fill="black" font-size="200" font-family="Source Han Sans" text-anchor="start" font-weight="800" letter-spacing="-5px">
+                      Team
+                  </text>
+              </g>
+          </g>
+          <g clip-path="url(#cut)" transform="matrix(0.709, 0.410, 0, 2.048, 0, 0)">
+              <rect width="625" height="250" fill="black"/>
+              <text x="20" y="200" fill="white" font-size="200" font-family="Source Han Sans" text-anchor="start" font-weight="800" letter-spacing="-5px">
+                  MonoK
+              </text>
+          </g>
+          <g clip-path="url(#cut)" transform="matrix(0.709, -0.410, 0, 2.048, 443.405, 256)">
+              <rect width="625" height="250" fill="white"/>
+              <text x="600" y="200" fill="black" font-size="200" font-family="Source Han Sans" text-anchor="end" font-weight="800" letter-spacing="-5px">
+                  Khrom
+              </text>
+          </g>
+      </g>
+  </svg>
+  </g>
+</svg>

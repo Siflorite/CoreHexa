@@ -1,9 +1,7 @@
 [gd_scene format=3 uid="uid://cbs1ncixno511"]
 
-[ext_resource type="Texture2D" uid="uid://qa82hb6y4lak" path="res://textures/hit_objects/note1.png" id="1_u8ikk"]
 [ext_resource type="Script" uid="uid://bjc66aur47xbg" path="res://scripts/notes/note.gd" id="2_djjql"]
 
 [node name="Sprite2D" type="Sprite2D" unique_id=1676009855]
-texture = ExtResource("1_u8ikk")
 script = ExtResource("2_djjql")
 target_size = Vector2(240, 80)

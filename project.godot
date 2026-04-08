@@ -13,7 +13,9 @@ config_version=5
 config/name="CoreHexa"
 run/main_scene="uid://ixwxm72oa1ax"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+boot_splash/stretch_mode=2
+boot_splash/image="uid://bsfnmibo4syfa"
+config/icon="uid://xe8dot7ra40g"
 
 [audio]
 

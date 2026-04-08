@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ekh4ifqw6nxh"
-path="res://.godot/imported/God-ish.jpg-7d940b6fe95774f9c9aba643a99773ee.ctex"
+uid="uid://5dakqbvhnuha"
+path="res://.godot/imported/team_monokhrom_v2.svg-126c08a39831bc72030b6d19c3cb9476.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://charts/godish/God-ish.jpg"
-dest_files=["res://.godot/imported/God-ish.jpg-7d940b6fe95774f9c9aba643a99773ee.ctex"]
+source_file="res://icons/team_monokhrom_v2.svg"
+dest_files=["res://.godot/imported/team_monokhrom_v2.svg-126c08a39831bc72030b6d19c3cb9476.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

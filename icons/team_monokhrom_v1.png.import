@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ekh4ifqw6nxh"
-path="res://.godot/imported/God-ish.jpg-7d940b6fe95774f9c9aba643a99773ee.ctex"
+uid="uid://bqmb4ybfcjxug"
+path="res://.godot/imported/team_monokhrom_v1.png-733b876fdd275abd0c1494ae438874f8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://charts/godish/God-ish.jpg"
-dest_files=["res://.godot/imported/God-ish.jpg-7d940b6fe95774f9c9aba643a99773ee.ctex"]
+source_file="res://icons/team_monokhrom_v1.png"
+dest_files=["res://.godot/imported/team_monokhrom_v1.png-733b876fdd275abd0c1494ae438874f8.ctex"]
 
 [params]
 

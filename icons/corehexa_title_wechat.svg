@@ -1,0 +1,50 @@
+<svg width="4096" height="1750" xmlns="http://www.w3.org/2000/svg">
+<defs>
+    <radialGradient id="gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="100%" stop-color="#e4e4e4"/>
+    </radialGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#4548ee"/>
+        <stop offset="100%" stop-color="#9a77ee"/>
+    </linearGradient>
+    <radialGradient id="gradient3">
+        <stop offset="0%" stop-color="#4548ee"/>
+        <stop offset="100%" stop-color="#9a77ee"/>
+    </radialGradient>
+</defs>
+    <rect width="4096" height="1750" fill="white"/>
+    <g transform="translate(0, 363)">
+        <polygon
+            points="62,512 287,122.29 737,122.29 962,512 737,901.71 287,901.71"
+            fill="none"
+            stroke="url(#gradient2)"
+            stroke-width="60" 
+        />
+        
+        <polygon
+            points="262,512 387,295.49 637,295.49 762,512 637,728.51 387,728.51"
+            transform="rotate(30, 512, 512)"
+            fill="url(#gradient2)"
+            stroke="url(#gradient2)"
+            stroke-width="70" 
+        />
+
+        <line x1="512" x2="800" y1="512" y2="512" stroke="white" stroke-width="70" transform="rotate(-30, 512, 512)"/>
+        <line x1="512" x2="800" y1="512" y2="512" stroke="white" stroke-width="70" transform="rotate(90, 512, 512)"/>
+        <line x1="512" x2="800" y1="512" y2="512" stroke="white" stroke-width="70" transform="rotate(-150, 512, 512)"/>
+
+        <polygon
+            points="162,512 337,208.89 687,208.89 862,512 687,815.11 337,815.11"
+            transform="rotate(15, 512, 512)"
+            fill="none"
+            stroke="url(#gradient2)"
+            stroke-width="65" 
+        />
+
+        <text x="1100" y="700" font-family="Source Han Sans" font-size="600" font-weight="600" text-anchor="left" fill="url(#gradient2)">
+            CoreHexa
+        </text>
+    </g>
+    
+</svg>

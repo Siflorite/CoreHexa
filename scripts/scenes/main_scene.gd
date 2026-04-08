@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var chart_path: String = "res://charts/hello/hello.json"
+@export var chart_path: String = "res://charts/godish/godish.json"
 var audio_path: String = ""
 
 var chart_data: HexaType.ChartData = null
@@ -11,11 +11,22 @@ var offset: float = 0.0
 var all_notes: Array[Note] = []
 var existing_notes: Array[Note] = []
 var note_scene: Resource = preload("res://scenes/notes/note.tscn")
+var long_note_scene: Resource = preload("res://scenes/notes/long_note.tscn")
 
 var current_time: float = 0.0
 const START_DELAY: float = 2.0
 
 var time_label: Label = null
+
+var column_textures: Array[Texture2D] = [
+	preload("res://textures/hit_objects/note1.png"),
+	preload("res://textures/hit_objects/note2.png"),
+	preload("res://textures/hit_objects/note1.png"),
+	preload("res://textures/hit_objects/note1.png"),
+	preload("res://textures/hit_objects/note2.png"),
+	preload("res://textures/hit_objects/note1.png"),
+]
+
 
 func load_chart() -> void:
 	# 加载谱面文件
@@ -70,12 +81,23 @@ func _on_start_timer_timeout() -> void:
 
 func spawn_notes() -> void:
 	for note_data in chart_data.notes:
-		# 生成Note的实例
-		var note: Note = note_scene.instantiate()
-		note.column = note_data.column
-		note.time = note_data.time
-		note.scroll_time = scroll_time
-		
+		var note: Note = null
+		if note_data.is_hold_note():
+			# 生成LongNote的实例
+			note = long_note_scene.instantiate()
+			var long_note := note as LongNote # No data copy, only a reference alias
+			long_note.column = note_data.column
+			long_note.time = note_data.time
+			long_note.end_time = note_data.end_time
+			long_note.scroll_time = scroll_time
+		else:
+			# 生成Note的实例
+			note = note_scene.instantiate()
+			note.column = note_data.column
+			note.time = note_data.time
+			note.scroll_time = scroll_time
+			
+		note.texture = column_textures[note.column]
 		# 确定Note的初始位置
 		var x_pos: float = (0.5 + note.column) / 6.0 * get_viewport_rect().size.x
 		# 计算Y位置，需要根据变速计算出视觉位置，不过这里就先随便弄弄

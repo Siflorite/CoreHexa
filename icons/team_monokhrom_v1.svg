@@ -1,0 +1,14 @@
+<svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+<rect width="1024" height="380" fill="white" />
+<rect y="380" width="1024" height="684" fill="black" />
+
+<text fill="black" font-size="200" font-family="Source Han Sans" x="150" y="340" text-anchor="left" font-weight="800">
+    Team
+</text>
+<text fill="white" font-size="200" font-family="Source Han Sans" x="150" y="580" text-anchor="left" font-weight="800">
+    Mono
+</text>
+<text fill="white" font-size="200" font-family="Source Han Sans" x="150" y="790" text-anchor="left" font-weight="800">
+    Khrom
+</text>
+</svg>
