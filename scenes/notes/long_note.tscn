@@ -2,6 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dy2gyiv1hq7qo" path="res://scripts/notes/long_note.gd" id="2_iuw7s"]
 
-[node name="Sprite2D" type="Sprite2D" unique_id=777240355]
+[node name="NoteBase" type="Node2D" unique_id=1258636033]
 script = ExtResource("2_iuw7s")
-target_size = Vector2(240, 40)
+head_target_size = Vector2(240, 80)
+
+[node name="NoteBody" type="Sprite2D" parent="." unique_id=1926213510]
+z_as_relative = false
+
+[node name="NoteTail" type="Sprite2D" parent="." unique_id=418909681]
+z_as_relative = false
+
+[node name="NoteHead" type="Sprite2D" parent="." unique_id=1407608457]

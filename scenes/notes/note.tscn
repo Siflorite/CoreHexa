@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bjc66aur47xbg" path="res://scripts/notes/note.gd" id="2_djjql"]
 
-[node name="Sprite2D" type="Sprite2D" unique_id=1676009855]
+[node name="NoteBase" type="Node2D" unique_id=2008323294]
 script = ExtResource("2_djjql")
-target_size = Vector2(240, 80)
+head_target_size = Vector2(240, 80)
+
+[node name="NoteHead" type="Sprite2D" parent="." unique_id=1677902099]

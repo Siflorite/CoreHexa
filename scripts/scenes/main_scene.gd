@@ -18,7 +18,7 @@ const START_DELAY: float = 2.0
 
 var time_label: Label = null
 
-var column_textures: Array[Texture2D] = [
+@export var column_textures: Array[Texture2D] = [
 	preload("res://textures/hit_objects/note1.png"),
 	preload("res://textures/hit_objects/note2.png"),
 	preload("res://textures/hit_objects/note1.png"),
@@ -26,7 +26,7 @@ var column_textures: Array[Texture2D] = [
 	preload("res://textures/hit_objects/note2.png"),
 	preload("res://textures/hit_objects/note1.png"),
 ]
-
+var test_texture: Texture2D = preload("res://icons/team_monokhrom_v1.png")
 
 func load_chart() -> void:
 	# 加载谱面文件
@@ -86,18 +86,20 @@ func spawn_notes() -> void:
 			# 生成LongNote的实例
 			note = long_note_scene.instantiate()
 			var long_note := note as LongNote # No data copy, only a reference alias
+			long_note.set_ln_texture(column_textures[note_data.column], test_texture)
 			long_note.column = note_data.column
 			long_note.time = note_data.time
 			long_note.end_time = note_data.end_time
 			long_note.scroll_time = scroll_time
+			long_note.set_render_priority(2, 1, 0)
 		else:
 			# 生成Note的实例
 			note = note_scene.instantiate()
 			note.column = note_data.column
 			note.time = note_data.time
 			note.scroll_time = scroll_time
-			
-		note.texture = column_textures[note.column]
+		note.set_head_texture(column_textures[note.column])
+		
 		# 确定Note的初始位置
 		var x_pos: float = (0.5 + note.column) / 6.0 * get_viewport_rect().size.x
 		# 计算Y位置，需要根据变速计算出视觉位置，不过这里就先随便弄弄
@@ -112,6 +114,10 @@ func _ready() -> void:
 	setup_input()
 	spawn_notes()
 	start_game()
+	print("Audio Driver: ", AudioServer.get_driver_name())
+	print("Audio Sample Rate: ", AudioServer.get_mix_rate())
+	print("Audio Device List: ", AudioServer.get_output_device_list())
+	print("Audio Device: ", AudioServer.get_output_device())
 	print("Audio Latency:", AudioServer.get_output_latency() * 1000.0, " ms")
 	
 func _process(delta: float) -> void:
