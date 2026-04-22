@@ -53,7 +53,4 @@ func _ready() -> void:
 	pass
 	
 func _process(delta: float) -> void:
-	var velocity: float = viewport_height / scroll_time
-	position.y += velocity * delta
-	if position.y > viewport_height + body_target_size.y + 200:
-		queue_free()
+	super._process(delta)

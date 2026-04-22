@@ -24,5 +24,6 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var velocity: float = viewport_height / scroll_time
-	position.y += velocity * delta
+	# var velocity: float = viewport_height / scroll_time
+	# position.y += velocity * delta
+	pass

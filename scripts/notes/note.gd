@@ -28,5 +28,3 @@ func _ready() -> void:
 	
 func _process(delta: float) -> void:
 	super._process(delta)
-	if position.y > viewport_height + 2 * head_target_size.y:
-		queue_free()
