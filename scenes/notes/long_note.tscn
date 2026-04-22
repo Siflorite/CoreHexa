@@ -4,6 +4,8 @@
 
 [node name="NoteBase" type="Node2D" unique_id=1258636033]
 script = ExtResource("2_iuw7s")
+body_target_size = Vector2(160, 40)
+tail_target_size = Vector2(160, 80)
 head_target_size = Vector2(240, 80)
 
 [node name="NoteBody" type="Sprite2D" parent="." unique_id=1926213510]

@@ -25,7 +25,7 @@ var time_label: Label = null
 
 var output_latency: float = 0.0
 
-@export var column_head_textures: Array[Texture2D] = [
+@export var single_head_textures: Array[Texture2D] = [
 	preload("res://textures/hit_objects/note1.png"),
 	preload("res://textures/hit_objects/note2.png"),
 	preload("res://textures/hit_objects/note1.png"),
@@ -33,23 +33,30 @@ var output_latency: float = 0.0
 	preload("res://textures/hit_objects/note2.png"),
 	preload("res://textures/hit_objects/note1.png"),
 ]
-@export var column_body_textures: Array[Texture2D] = [
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note2.png"),
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note2.png"),
-	preload("res://textures/hit_objects/note1.png"),
+@export var ln_head_textures: Array[Texture2D] = [
+	preload("res://textures/hit_objects/note3.png"),
+	preload("res://textures/hit_objects/note4.png"),
+	preload("res://textures/hit_objects/note3.png"),
+	preload("res://textures/hit_objects/note3.png"),
+	preload("res://textures/hit_objects/note4.png"),
+	preload("res://textures/hit_objects/note3.png"),
 ]
-@export var column_tail_textures: Array[Texture2D] = [
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note2.png"),
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note2.png"),
-	preload("res://textures/hit_objects/note1.png"),
+@export var ln_body_textures: Array[Texture2D] = [
+	preload("res://textures/hit_objects/ln_body.png"),
+	preload("res://textures/hit_objects/ln_body.png"),
+	preload("res://textures/hit_objects/ln_body.png"),
+	preload("res://textures/hit_objects/ln_body.png"),
+	preload("res://textures/hit_objects/ln_body.png"),
+	preload("res://textures/hit_objects/ln_body.png"),
 ]
-var test_texture: Texture2D = preload("res://icons/team_monokhrom_v1.png")
+@export var ln_tail_textures: Array[Texture2D] = [
+	preload("res://textures/hit_objects/ln_tail.png"),
+	preload("res://textures/hit_objects/ln_tail.png"),
+	preload("res://textures/hit_objects/ln_tail.png"),
+	preload("res://textures/hit_objects/ln_tail.png"),
+	preload("res://textures/hit_objects/ln_tail.png"),
+	preload("res://textures/hit_objects/ln_tail.png"),
+]
 
 ## 窗口高度变化时更新内部变量，保证物件位置和下落速度相对窗口高度比例不变
 func _update_size() -> void:
@@ -115,7 +122,8 @@ func generate_note(note_data: HexaType.NoteData) -> Note:
 		# 生成LongNote的实例
 		note = long_note_scene.instantiate()
 		var long_note := note as LongNote # No data copy, only a reference alias
-		long_note.set_ln_texture(column_head_textures[note_data.column], test_texture)
+		long_note.set_head_texture(ln_head_textures[note_data.column])
+		long_note.set_ln_texture(ln_body_textures[note_data.column], ln_tail_textures[note_data.column])
 		long_note.column = note_data.column
 		long_note.time = note_data.time
 		long_note.end_time = note_data.end_time
@@ -127,7 +135,7 @@ func generate_note(note_data: HexaType.NoteData) -> Note:
 		note.column = note_data.column
 		note.time = note_data.time
 		note.scroll_time = scroll_time
-	note.set_head_texture(column_head_textures[note.column])
+		note.set_head_texture(single_head_textures[note.column])
 	return note
 
 ## 生成新物件
