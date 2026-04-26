@@ -1,0 +1,7 @@
+{
+    "rust-analyzer.linkedProjects": [
+        
+        "misc_helpers/hexa-converter/Cargo.toml",
+        "misc_helpers/hexa-skin/Cargo.toml"
+    ]
+}
