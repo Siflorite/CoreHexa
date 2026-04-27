@@ -4,6 +4,5 @@
 
 [node name="NoteBase" type="Node2D" unique_id=2008323294]
 script = ExtResource("2_djjql")
-head_target_size = Vector2(240, 80)
 
 [node name="NoteHead" type="Sprite2D" parent="." unique_id=1677902099]

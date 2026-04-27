@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://b5qd7u2b2fyaj"
-path="res://.godot/imported/God-ish.mp3-c5585cad785571e61cc08fac39e86b23.mp3str"
+path="res://.godot/imported/God-ish.mp3-57d2455b916b9b9cd12c59102b911bf1.mp3str"
 
 [deps]
 
-source_file="res://charts/Godish/God-ish.mp3"
-dest_files=["res://.godot/imported/God-ish.mp3-c5585cad785571e61cc08fac39e86b23.mp3str"]
+source_file="res://charts/godish/God-ish.mp3"
+dest_files=["res://.godot/imported/God-ish.mp3-57d2455b916b9b9cd12c59102b911bf1.mp3str"]
 
 [params]
 

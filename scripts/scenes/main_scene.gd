@@ -1,9 +1,12 @@
 extends Node2D
 
 @export var chart_path: String = "res://charts/godish/godish.json"
+@export var skin_path: String = "res://skins/default/skin.json"
 var audio_path: String = ""
 
 var chart_data: HexaType.ChartData = null
+var skin_data: ModuleType.HexaSkin = null
+var background: Texture2D = null
 var audio_player: AudioStreamPlayer = null
 @export var scroll_time: float = 0.5
 const RENDER_ADVANCE_TIME: float = 0.5
@@ -25,38 +28,24 @@ var time_label: Label = null
 
 var output_latency: float = 0.0
 
-@export var single_head_textures: Array[Texture2D] = [
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note2.png"),
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note1.png"),
-	preload("res://textures/hit_objects/note2.png"),
-	preload("res://textures/hit_objects/note1.png"),
-]
-@export var ln_head_textures: Array[Texture2D] = [
-	preload("res://textures/hit_objects/note3.png"),
-	preload("res://textures/hit_objects/note4.png"),
-	preload("res://textures/hit_objects/note3.png"),
-	preload("res://textures/hit_objects/note3.png"),
-	preload("res://textures/hit_objects/note4.png"),
-	preload("res://textures/hit_objects/note3.png"),
-]
-@export var ln_body_textures: Array[Texture2D] = [
-	preload("res://textures/hit_objects/ln_body.png"),
-	preload("res://textures/hit_objects/ln_body.png"),
-	preload("res://textures/hit_objects/ln_body.png"),
-	preload("res://textures/hit_objects/ln_body.png"),
-	preload("res://textures/hit_objects/ln_body.png"),
-	preload("res://textures/hit_objects/ln_body.png"),
-]
-@export var ln_tail_textures: Array[Texture2D] = [
-	preload("res://textures/hit_objects/ln_tail.png"),
-	preload("res://textures/hit_objects/ln_tail.png"),
-	preload("res://textures/hit_objects/ln_tail.png"),
-	preload("res://textures/hit_objects/ln_tail.png"),
-	preload("res://textures/hit_objects/ln_tail.png"),
-	preload("res://textures/hit_objects/ln_tail.png"),
-]
+var column_pos: Array[Vector2] = []
+
+var single_head_textures: Array[Texture2D] = []
+var ln_head_textures: Array[Texture2D] = []
+var ln_body_textures: Array[Texture2D] = []
+var ln_tail_textures: Array[Texture2D] = []
+
+var single_sizes: Array[Vector2] = []
+var single_z_indexes: Array[int] = []
+
+var ln_head_sizes: Array[Vector2] = []
+var ln_head_z_indexes: Array[int] = []
+
+var ln_body_sizes: Array[Vector2] = []
+var ln_body_z_indexes: Array[int] = []
+
+var ln_tail_sizes: Array[Vector2] = []
+var ln_tail_z_indexes: Array[int] = []
 
 ## 窗口高度变化时更新内部变量，保证物件位置和下落速度相对窗口高度比例不变
 func _update_size() -> void:
@@ -79,6 +68,66 @@ func load_chart() -> void:
 		add_child(audio_player)
 	else:
 		push_error("音乐文件不存在: " + audio_path)
+
+func load_skin() -> void:
+	skin_data = SkinLoader.load_skin(skin_path)
+	if skin_data == null:
+		push_error("皮肤加载失败")
+		return
+
+	# 设置背景
+	if skin_data.background.texture != null:
+		var background_sprite := skin_data.background.generate()
+		if background_sprite != null:
+			add_child(background_sprite)
+
+	column_pos.resize(6)
+	single_head_textures.resize(6)
+	single_sizes.resize(6)
+	single_z_indexes.resize(6)
+	ln_head_textures.resize(6)
+	ln_head_sizes.resize(6)
+	ln_head_z_indexes.resize(6)
+	ln_body_textures.resize(6)
+	ln_body_sizes.resize(6)
+	ln_body_z_indexes.resize(6)
+	ln_tail_textures.resize(6)
+	ln_tail_sizes.resize(6)
+	ln_tail_z_indexes.resize(6)
+
+	for column in skin_data.columns:
+		var idx: int = column.index
+		column_pos[idx] = Vector2(column.x, column.y)
+		var column_sprite := column.generate()
+		
+		if column_sprite != null:
+			column_sprite.offset.y = - column_sprite.texture.get_size().y
+			add_child(column_sprite)
+
+		single_head_textures[idx] = column.single.texture
+		single_sizes[idx] = Vector2(column.width, column.single.height)
+		single_z_indexes[idx] = column.single.z_index
+
+		ln_head_textures[idx] = column.long_head.texture
+		ln_head_sizes[idx] = Vector2(column.width, column.long_head.height)
+		ln_head_z_indexes[idx] = column.long_head.z_index
+
+		ln_body_textures[idx] = column.long_body.texture
+		ln_body_sizes[idx] = Vector2(column.long_body.width, 0)
+		ln_body_z_indexes[idx] = column.long_body.z_index
+
+		ln_tail_textures[idx] = column.long_tail.texture
+		ln_tail_sizes[idx] = Vector2(column.long_tail.width, column.long_tail.height)
+		ln_tail_z_indexes[idx] = column.long_tail.z_index
+
+	for module in skin_data.customs:
+		if module is ModuleType.ImageModule:
+			var image: Sprite2D = module.generate()
+			add_child(image)
+		elif module is ModuleType.RectModule:
+			var rect: ColorRect = module.generate()
+			add_child(rect)
+	pass
 
 func setup_ui() -> void:
 	# 显示歌曲信息
@@ -122,20 +171,33 @@ func generate_note(note_data: HexaType.NoteData) -> Note:
 		# 生成LongNote的实例
 		note = long_note_scene.instantiate()
 		var long_note := note as LongNote # No data copy, only a reference alias
+		var render_height: float = (note_data.end_time - note_data.time) / scroll_time * viewport_size.y
+		long_note.head_target_size = ln_head_sizes[note_data.column]
+		long_note.body_target_size = Vector2(
+			ln_body_sizes[note_data.column].x, 
+			max(render_height - ln_tail_sizes[note_data.column].y, 0)
+		) 
+		# 理论上设置body长度时会同时调整tail位置，y坐标到body最上端
+		# 但是因为还没加入节点树所以不会更新，太扯淡了，在set_ln_texture里面再调用一次吧
+		long_note.tail_target_size = ln_tail_sizes[note_data.column]
 		long_note.set_head_texture(ln_head_textures[note_data.column])
 		long_note.set_ln_texture(ln_body_textures[note_data.column], ln_tail_textures[note_data.column])
+		long_note.set_render_priority(
+			ln_head_z_indexes[note_data.column],
+			ln_body_z_indexes[note_data.column],
+			ln_tail_z_indexes[note_data.column]
+		)
 		long_note.column = note_data.column
 		long_note.time = note_data.time
 		long_note.end_time = note_data.end_time
-		long_note.scroll_time = scroll_time
-		long_note.set_render_priority(2, 1, 0)
 	else:
 		# 生成Note的实例
 		note = note_scene.instantiate()
+		note.set_head_texture(single_head_textures[note_data.column])
+		note.head_target_size = single_sizes[note_data.column]
+		note.z_index = single_z_indexes[note_data.column]
 		note.column = note_data.column
 		note.time = note_data.time
-		note.scroll_time = scroll_time
-		note.set_head_texture(single_head_textures[note.column])
 	return note
 
 ## 生成新物件
@@ -146,7 +208,7 @@ func generate_new_notes(audio_time: float) -> void:
 		if note_data.time < audio_time + scroll_time + RENDER_ADVANCE_TIME:
 			var note: Note = generate_note(note_data)
 			# 确定Note的初始位置
-			var x_pos: float = (0.5 + note_data.column) / 6.0 * viewport_size.x
+			var x_pos: float = column_pos[note_data.column].x + note.head_target_size.x / 2
 			# 计算Y位置，需要根据变速计算出视觉位置，不过这里就先随便弄弄
 			var y_pos: float = (audio_time - note_data.time + scroll_time) / scroll_time * viewport_size.y
 			note.position = Vector2(x_pos, y_pos)
@@ -182,6 +244,7 @@ func update_existing_notes(audio_time: float) -> void:
 func _ready() -> void:
 	_update_size()
 	get_viewport().size_changed.connect(_update_size)
+	load_skin()
 	load_chart()
 	setup_ui()
 	setup_input()

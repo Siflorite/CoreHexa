@@ -5,8 +5,6 @@ extends Node2D
 var column: int = 0
 ## 物件判定时间，单位为ms
 var time: float = 0.0
-## 物件从屏幕顶端到判定线时间，单位为ms
-@export var scroll_time: float = 0.5
 ## 视口高度
 var viewport_height: float = 0.0
 

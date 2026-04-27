@@ -1,7 +1,7 @@
 class_name Note
 extends NoteBase
 
-@export var head_target_size: Vector2 = Vector2(120, 40):
+var head_target_size: Vector2 = Vector2(120, 40):
 	set(value):
 		head_target_size = value
 		if is_node_ready():
