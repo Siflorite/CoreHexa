@@ -3,6 +3,7 @@ extends Node2D
 @export var chart_path: String = "res://charts/godish/godish.json"
 @export var skin_path: String = "res://skins/default/skin.json"
 var audio_path: String = ""
+var background_path: String = ""
 
 var chart_data: HexaType.ChartData = null
 var skin_data: ModuleType.HexaSkin = null
@@ -69,17 +70,17 @@ func load_chart() -> void:
 	else:
 		push_error("音乐文件不存在: " + audio_path)
 
+	# 加载背景
+	background_path = chart_path.get_base_dir().path_join(chart_data.get_background_filename())
+	if FileAccess.file_exists(background_path):
+		background = load(background_path)
+
+
 func load_skin() -> void:
 	skin_data = SkinLoader.load_skin(skin_path)
 	if skin_data == null:
 		push_error("皮肤加载失败")
 		return
-
-	# 设置背景
-	if skin_data.background.texture != null:
-		var background_sprite := skin_data.background.generate()
-		if background_sprite != null:
-			add_child(background_sprite)
 
 	column_pos.resize(6)
 	single_head_textures.resize(6)
@@ -98,11 +99,20 @@ func load_skin() -> void:
 	for column in skin_data.columns:
 		var idx: int = column.index
 		column_pos[idx] = Vector2(column.x, column.y)
-		var column_sprite := column.generate()
+		var column_rect := column.generate()
 		
-		if column_sprite != null:
-			column_sprite.offset.y = - column_sprite.texture.get_size().y
-			add_child(column_sprite)
+		if column_rect != null:
+			# column_rect.offset.y = - column_rect.texture.get_size().y
+			add_child(column_rect)
+		else:
+			# 使用黑色矩形代替
+			var column_bar := ColorRect.new()
+			column_bar.offset_left = column.x
+			column_bar.color = Color.BLACK
+			column_bar.position = Vector2(column.x, column.y - viewport_size.y)
+			column_bar.size = Vector2(column.width, viewport_size.y)
+			column_bar.z_index = column.z_index
+			add_child(column_bar)
 
 		single_head_textures[idx] = column.single.texture
 		single_sizes[idx] = Vector2(column.width, column.single.height)
@@ -122,7 +132,7 @@ func load_skin() -> void:
 
 	for module in skin_data.customs:
 		if module is ModuleType.ImageModule:
-			var image: Sprite2D = module.generate()
+			var image: TextureRect = module.generate()
 			add_child(image)
 		elif module is ModuleType.RectModule:
 			var rect: ColorRect = module.generate()
@@ -145,6 +155,14 @@ func setup_ui() -> void:
 	time_label.position = Vector2(20, 120)
 	time_label.add_theme_font_size_override("font_size", 24)
 	add_child(time_label)
+
+	# 设置背景
+	if skin_data != null:
+		if skin_data.background.texture == null and background != null:
+			skin_data.background.texture = background
+		var background_rect := skin_data.background.generate()
+		if background_rect != null:
+			add_child(background_rect)
 
 func setup_input() -> void:
 	# 先不设置
@@ -238,6 +256,10 @@ func update_existing_notes(audio_time: float) -> void:
 			# 调整当前note的y坐标
 			var target_y: float = (audio_time - note.time + scroll_time) / scroll_time * viewport_size.y
 			note.position.y = target_y
+			if note is LongNote:
+				if note.time < audio_time and note.end_time > audio_time:
+					# 一个特性，在长键头部低于判定区，尾部还没到判定区时，将头部固定在判定位置，未来可能拓展为皮肤控制
+					note.set_head_position_y(viewport_size.y - target_y)
 			still_existing_notes.append(note)
 	existing_notes = still_existing_notes
 

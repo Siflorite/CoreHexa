@@ -21,6 +21,9 @@ func _update_head_texture_scale() -> void:
 	if $NoteHead.texture:
 		$NoteHead.scale = head_target_size / $NoteHead.texture.get_size()
 
+func set_head_position_y(y: float) -> void:
+	$NoteHead.position.y = y
+
 func _ready() -> void:
 	super._ready()
 	_set_sprite_anchor()

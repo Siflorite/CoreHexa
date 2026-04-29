@@ -63,21 +63,19 @@ class ImageModule extends Module:
 		else:
 			push_warning("图片组件材质 ", texture_path, " 无法加载")
 	
-	func generate() -> Sprite2D:
+	func generate() -> TextureRect:
 		if self.texture != null:
-			var sprite := Sprite2D.new()
-			sprite.texture = self.texture
-			sprite.position = Vector2(self.x, self.y)
-			# 设置大小
-			var target_size := Vector2(self.width, self.height)
-			sprite.scale = target_size / sprite.texture.get_size()
-			sprite.centered = false
-			sprite.modulate.a = self.alpha
-			sprite.z_index = self.z_index
-			return sprite
+			var rect := TextureRect.new()
+			rect.texture = self.texture
+			rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			rect.stretch_mode = TextureRect.STRETCH_SCALE
+			rect.position = Vector2(self.x, self.y)
+			rect.size = Vector2(self.width, self.height)
+			rect.modulate.a = self.alpha
+			rect.z_index = self.z_index
+			return rect
 		else:
 			return null
-	
 
 ## 矩形模块
 class RectModule extends Module:
@@ -133,6 +131,8 @@ class HexaSkin:
 		author = data.get("author", "")
 		version = data.get("version", "")
 		background = ImageModule.new(data.get("background", {}), json_path)
+		if data.get("background", {}) != null:
+			background.z_index = data.get("background", {}).get("z_index", -1)
 		columns = []
 		var column_set: Dictionary = {} # 好家伙，也跟Golang一样用字典做集合呗
 		customs = []

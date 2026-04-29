@@ -8,6 +8,7 @@ class MetaData:
 	var artist_unicode: String
 	var creator: String
 	var version: String
+	var background: String
 	var audio: String
 	var preview: int
 	
@@ -18,6 +19,7 @@ class MetaData:
 		artist_unicode = data.get("artist_unicode", "")
 		creator = data.get("creator", "")
 		version = data.get("version", "")
+		background = data.get("background", "")
 		audio = data.get("audio", "")
 		preview = data.get("preview", -1)
 
@@ -98,3 +100,6 @@ class ChartData:
 	
 	func get_audio_offset() -> float:
 		return timing_points[0].time
+	
+	func get_background_filename() -> String:
+		return meta.background if not meta.background.is_empty() else ""
