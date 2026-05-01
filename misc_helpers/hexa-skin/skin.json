@@ -183,10 +183,11 @@
     {
       "type": "image",
       "texture": "res://icons/corehexa.png",
+      "stretch_mode": "keep_aspect_covered",
       "x": 1200.0,
       "y": 290.0,
       "width": 500.0,
-      "height": 500.0,
+      "height": 300.0,
       "alpha": 0.5,
       "z_index": 0
     },

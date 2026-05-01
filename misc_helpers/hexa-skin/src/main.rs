@@ -7,10 +7,25 @@ enum CustomField {
     Rect(Rect),
 }
 
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "snake_case")]
+#[allow(unused)]
+enum StretchMode {
+    Scale,
+    Tile, 
+    Keep,
+    KeepCentered,
+    KeepAspect,
+    KeepAspectCentered,
+    KeepAspectCovered,
+}
+
 #[derive(Clone, Debug, Default, Serialize)]
 struct Image {
     #[serde(skip_serializing_if = "Option::is_none")]
     texture: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    stretch_mode: Option<StretchMode>,
     #[serde(skip_serializing_if = "Option::is_none")]
     x: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -113,10 +128,11 @@ fn main() {
     let customs = vec![
         CustomField::Image(Image { 
             texture: Some("res://icons/corehexa.png".into()), 
+            stretch_mode: Some(StretchMode::KeepAspectCovered),
             x: Some(1200.0), 
             y: Some(290.0), 
             width: Some(500.0), 
-            height: Some(500.0), 
+            height: Some(300.0), 
             alpha: Some(0.5), 
             z_index: 0, 
         }),

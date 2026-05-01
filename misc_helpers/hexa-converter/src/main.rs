@@ -9,6 +9,7 @@ struct Meta {
     artist_unicode: String,
     creator: String,
     version: String,
+    background: String,
     audio: String,
     preview: i32, // 与osu规则相同，未指定时为-1
 }
@@ -49,6 +50,7 @@ impl From<OsuDataLegacy> for HexaData {
             artist_unicode: value.misc.artist_unicode,
             creator: value.misc.creator,
             version: value.misc.version,
+            background: value.misc.background,
             audio: value.misc.audio_file_name,
             preview: value.misc.preview_time,
         };
@@ -96,10 +98,10 @@ impl From<OsuDataLegacy> for HexaData {
 }
 
 fn main() {
-    let chart = "charts/Toketsuia - God-ish (AhoUsagi) [God's Sister].osu";
+    let chart = "charts/onoken a.k.a. owltree - Melodiniq (TwilightDawnLi) [[22] Linked VERSE FINALE].osu";
     let chart_osu_data = OsuDataLegacy::from_file(chart).unwrap();
     // println!("{:?}", chart_osu_data);
     let chart_hexa_data = HexaData::from(chart_osu_data);
     let chart_hexa_data_json = serde_json::to_string_pretty(&chart_hexa_data).unwrap();
-    std::fs::write("godish.json", chart_hexa_data_json).unwrap();
+    std::fs::write("melodiniq.json", chart_hexa_data_json).unwrap();
 }

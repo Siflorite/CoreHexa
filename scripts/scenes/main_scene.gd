@@ -168,7 +168,12 @@ func setup_ui() -> void:
 		var background_rect := skin_data.background.generate()
 		if background_rect != null:
 			add_child(background_rect)
-
+	elif background != null:
+		var background_rect := TextureRect.new()
+		background_rect.texture = background
+		background_rect.size = Vector2(bg_width, bg_height)
+		add_child(background_rect)
+	
 func setup_input() -> void:
 	# 先不设置
 	pass

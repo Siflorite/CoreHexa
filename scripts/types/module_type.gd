@@ -63,6 +63,25 @@ class ImageModule extends Module:
 			texture = resource
 		else:
 			push_warning("图片组件材质 ", texture_path, " 无法加载")
+		
+		var stretch_mode_str: String = data.get("stretch_mode", "")
+		match stretch_mode_str:
+			"scale":
+				stretch_mode = TextureRect.STRETCH_SCALE # 缩放以适应边界
+			"tile":
+				stretch_mode = TextureRect.STRETCH_TILE # 边界内平铺
+			"keep":
+				stretch_mode = TextureRect.STRETCH_KEEP # 保持原始大小，放置在左上角
+			"keep_centered":
+				stretch_mode = TextureRect.STRETCH_KEEP_CENTERED # 保持原始大小，放置在中心
+			"keep_aspect":
+				stretch_mode = TextureRect.STRETCH_KEEP_ASPECT # 保持长宽比，缩放以适应边界
+			"keep_aspect_centered":
+				stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED # 保持长宽比，缩放以适应边界，放置在中心
+			"keep_aspect_covered":
+				stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED # 保持长宽比，缩放使短边适应边界，另一边裁剪
+			_:
+				stretch_mode = TextureRect.STRETCH_SCALE
 	
 	func generate() -> TextureRect:
 		if self.texture != null:
@@ -104,8 +123,8 @@ class BackgroundModule extends ImageModule:
 		super._init(data, base_path)
 		if not data.has("z_index"):
 			z_index = -1 # 背景z_index默认值为-1
-		if not data.has("stretch"):
-			stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		if not data.has("stretch_mode"):
+			stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED # 背景默认保持比例居中
 
 ## 轨道
 class ColumnModule extends ImageModule:
