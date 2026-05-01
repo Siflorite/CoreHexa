@@ -102,12 +102,12 @@ func load_skin() -> void:
 		var column_rect := column.generate()
 		
 		if column_rect != null:
-			# column_rect.offset.y = - column_rect.texture.get_size().y
+			column_rect.size.y = viewport_size.y
+			column_rect.position.y -= viewport_size.y
 			add_child(column_rect)
 		else:
 			# 使用黑色矩形代替
 			var column_bar := ColorRect.new()
-			column_bar.offset_left = column.x
 			column_bar.color = Color.BLACK
 			column_bar.position = Vector2(column.x, column.y - viewport_size.y)
 			column_bar.size = Vector2(column.width, viewport_size.y)
@@ -157,7 +157,12 @@ func setup_ui() -> void:
 	add_child(time_label)
 
 	# 设置背景
+	var bg_width: float = skin_data.background.width if skin_data.background.width > 0  else viewport_size.x
+	var bg_height: float = skin_data.background.height if skin_data.background.height > 0  else viewport_size.y
+
 	if skin_data != null:
+		skin_data.background.width = bg_width
+		skin_data.background.height = bg_height
 		if skin_data.background.texture == null and background != null:
 			skin_data.background.texture = background
 		var background_rect := skin_data.background.generate()

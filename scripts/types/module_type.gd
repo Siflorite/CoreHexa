@@ -51,6 +51,7 @@ class Module:
 ## 图片模块
 class ImageModule extends Module:
 	var texture: Texture2D = null
+	var stretch_mode: TextureRect.StretchMode = TextureRect.STRETCH_SCALE
 	
 	func _init(data: Dictionary, base_path: String) -> void:
 		super._init(data, base_path)
@@ -68,7 +69,7 @@ class ImageModule extends Module:
 			var rect := TextureRect.new()
 			rect.texture = self.texture
 			rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			rect.stretch_mode = TextureRect.STRETCH_SCALE
+			rect.stretch_mode = stretch_mode
 			rect.position = Vector2(self.x, self.y)
 			rect.size = Vector2(self.width, self.height)
 			rect.modulate.a = self.alpha
@@ -96,6 +97,15 @@ class RectModule extends Module:
 		return rect
 
 # -------- 内置模块 --------
+
+## 背景
+class BackgroundModule extends ImageModule:
+	func _init(data: Dictionary, base_path: String) -> void:
+		super._init(data, base_path)
+		if not data.has("z_index"):
+			z_index = -1 # 背景z_index默认值为-1
+		if not data.has("stretch"):
+			stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
 ## 轨道
 class ColumnModule extends ImageModule:
@@ -130,9 +140,7 @@ class HexaSkin:
 		name = data.get("name", "")
 		author = data.get("author", "")
 		version = data.get("version", "")
-		background = ImageModule.new(data.get("background", {}), json_path)
-		if data.get("background", {}) != null:
-			background.z_index = data.get("background", {}).get("z_index", -1)
+		background = BackgroundModule.new(data.get("background", {}), json_path)
 		columns = []
 		var column_set: Dictionary = {} # 好家伙，也跟Golang一样用字典做集合呗
 		customs = []
@@ -158,7 +166,3 @@ class HexaSkin:
 					continue
 			if module != null:
 				customs.append(module)
-
-	func get_single_textures() -> Array[Texture2D]:
-		var textures: Array[Texture2D] = []
-		return textures
