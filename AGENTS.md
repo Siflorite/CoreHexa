@@ -1,5 +1,7 @@
 # CoreHexa AGENTS.md
 
+> **在执行任何任务前，务必先完整阅读本文件。**
+
 ## 项目类型
 Godot 4.6 6键下落式音游。语言：**GDScript** — 忽略 `project.godot` 里的 `[dotnet]` 配置，项目中没有 C# 代码。
 
