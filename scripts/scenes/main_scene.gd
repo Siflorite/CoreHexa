@@ -12,8 +12,11 @@ var audio_player: AudioStreamPlayer = null
 @export var scroll_time: float = 0.5
 const RENDER_ADVANCE_TIME: float = 0.5
 var offset: float = 0.0
-## 视口高度
+## 视口相关
+const DESIGN_WIDTH: float = 1920
+const DESIGN_HEIGHT: float = 1080
 var viewport_size: Vector2 = Vector2(0, 0)
+var keep_size_nodes: Array[Node] = []
 
 var existing_notes: Array[Note] = []
 var index: int = 0
@@ -51,6 +54,11 @@ var ln_tail_z_indexes: Array[int] = []
 ## 窗口高度变化时更新内部变量，保证物件位置和下落速度相对窗口高度比例不变
 func _update_size() -> void:
 	viewport_size = get_viewport_rect().size
+	var target_scale: Vector2 = viewport_size / Vector2(DESIGN_WIDTH, DESIGN_HEIGHT)
+	$GameArea.scale = target_scale
+	for node in keep_size_nodes:
+		var uniform_scale: float = max(target_scale.x, target_scale.y)
+		node.scale = Vector2(uniform_scale, uniform_scale) / target_scale
 
 func load_chart() -> void:
 	# 加载谱面文件
@@ -102,17 +110,17 @@ func load_skin() -> void:
 		var column_rect := column.generate()
 		
 		if column_rect != null:
-			column_rect.size.y = viewport_size.y
-			column_rect.position.y -= viewport_size.y
-			add_child(column_rect)
+			column_rect.size.y = DESIGN_HEIGHT
+			column_rect.position.y -= DESIGN_HEIGHT
+			$GameArea.add_child(column_rect)
 		else:
 			# 使用黑色矩形代替
 			var column_bar := ColorRect.new()
 			column_bar.color = Color.BLACK
-			column_bar.position = Vector2(column.x, column.y - viewport_size.y)
-			column_bar.size = Vector2(column.width, viewport_size.y)
+			column_bar.position = Vector2(column.x, column.y - DESIGN_HEIGHT)
+			column_bar.size = Vector2(column.width, DESIGN_HEIGHT)
 			column_bar.z_index = column.z_index
-			add_child(column_bar)
+			$GameArea.add_child(column_bar)
 
 		single_head_textures[idx] = column.single.texture
 		single_sizes[idx] = Vector2(column.width, column.single.height)
@@ -133,10 +141,12 @@ func load_skin() -> void:
 	for module in skin_data.customs:
 		if module is ModuleType.ImageModule:
 			var image: TextureRect = module.generate()
-			add_child(image)
+			if module.stretch_mode != TextureRect.STRETCH_SCALE and image != null:
+				keep_size_nodes.append(image)
+			$GameArea.add_child(image)
 		elif module is ModuleType.RectModule:
 			var rect: ColorRect = module.generate()
-			add_child(rect)
+			$GameArea.add_child(rect)
 	pass
 
 func setup_ui() -> void:
@@ -150,29 +160,31 @@ func setup_ui() -> void:
 	]
 	label.position = Vector2(20, 20)
 	label.add_theme_font_size_override("font_size", 24)
-	add_child(label)
+	$GameArea.add_child(label)
+	keep_size_nodes.append(label)
 	time_label = Label.new()
 	time_label.position = Vector2(20, 120)
 	time_label.add_theme_font_size_override("font_size", 24)
-	add_child(time_label)
+	$GameArea.add_child(time_label)
+	keep_size_nodes.append(time_label)
 
 	# 设置背景
-	var bg_width: float = skin_data.background.width if skin_data.background.width > 0  else viewport_size.x
-	var bg_height: float = skin_data.background.height if skin_data.background.height > 0  else viewport_size.y
+	var bg_width: float = skin_data.background.width if skin_data.background.width > 0  else DESIGN_WIDTH
+	var bg_height: float = skin_data.background.height if skin_data.background.height > 0  else DESIGN_HEIGHT
 
+	var background_rect: TextureRect = null
 	if skin_data != null:
 		skin_data.background.width = bg_width
 		skin_data.background.height = bg_height
 		if skin_data.background.texture == null and background != null:
 			skin_data.background.texture = background
-		var background_rect := skin_data.background.generate()
-		if background_rect != null:
-			add_child(background_rect)
+		background_rect = skin_data.background.generate()
 	elif background != null:
-		var background_rect := TextureRect.new()
 		background_rect.texture = background
 		background_rect.size = Vector2(bg_width, bg_height)
-		add_child(background_rect)
+	if background_rect != null:
+		keep_size_nodes.append(background_rect)
+		$GameArea.add_child(background_rect)
 	
 func setup_input() -> void:
 	# 先不设置
@@ -199,7 +211,7 @@ func generate_note(note_data: HexaType.NoteData) -> Note:
 		# 生成LongNote的实例
 		note = long_note_scene.instantiate()
 		var long_note := note as LongNote # No data copy, only a reference alias
-		var render_height: float = (note_data.end_time - note_data.time) / scroll_time * viewport_size.y
+		var render_height: float = (note_data.end_time - note_data.time) / scroll_time * DESIGN_HEIGHT
 		long_note.head_target_size = ln_head_sizes[note_data.column]
 		long_note.body_target_size = Vector2(
 			ln_body_sizes[note_data.column].x, 
@@ -238,9 +250,9 @@ func generate_new_notes(audio_time: float) -> void:
 			# 确定Note的初始位置
 			var x_pos: float = column_pos[note_data.column].x + note.head_target_size.x / 2
 			# 计算Y位置，需要根据变速计算出视觉位置，不过这里就先随便弄弄
-			var y_pos: float = (audio_time - note_data.time + scroll_time) / scroll_time * viewport_size.y
+			var y_pos: float = (audio_time - note_data.time + scroll_time) / scroll_time * DESIGN_HEIGHT
 			note.position = Vector2(x_pos, y_pos)
-			add_child(note)
+			$GameArea.add_child(note)
 			existing_notes.append(note)	
 			# print("idx: ", i, ", col: ", note_data.column, ", time: ", note_data.time, ", endtime: ", note_data.end_time)
 		else:
@@ -264,12 +276,12 @@ func update_existing_notes(audio_time: float) -> void:
 			# print("curtime: ", audio_time, ", notetime: ", note.time, ", etime: ", exist_time)
 		else:
 			# 调整当前note的y坐标
-			var target_y: float = (audio_time - note.time + scroll_time) / scroll_time * viewport_size.y
+			var target_y: float = (audio_time - note.time + scroll_time) / scroll_time * DESIGN_HEIGHT
 			note.position.y = target_y
 			if note is LongNote:
 				if note.time < audio_time and note.end_time > audio_time:
 					# 一个特性，在长键头部低于判定区，尾部还没到判定区时，将头部固定在判定位置，未来可能拓展为皮肤控制
-					note.set_head_position_y(viewport_size.y - target_y)
+					note.set_head_position_y(DESIGN_HEIGHT - target_y)
 			still_existing_notes.append(note)
 	existing_notes = still_existing_notes
 

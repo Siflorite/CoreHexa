@@ -124,7 +124,7 @@ class BackgroundModule extends ImageModule:
 		if not data.has("z_index"):
 			z_index = -1 # 背景z_index默认值为-1
 		if not data.has("stretch_mode"):
-			stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED # 背景默认保持比例居中
+			stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED # 背景默认保持比例居中
 
 ## 轨道
 class ColumnModule extends ImageModule:
