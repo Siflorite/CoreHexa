@@ -1,15 +1,15 @@
 {
-    "meta": {
-        "title": "Hexa",
-        "title_unicode": "Hexa",
-        "artist": "SFR",
-        "artist_unicode": "SFR",
-        "creator": "SiFouR",
-        "version": "Regular",
-        "audio": "hexa.ogg",
-        "preview": 0
-    },
-    "timings": [],
-    "effects": [],
-    "notes": []
+	"meta": {
+		"title": "Hexa",
+		"title_unicode": "Hexa",
+		"artist": "SFR",
+		"artist_unicode": "SFR",
+		"creator": "SiFouR",
+		"version": "Regular",
+		"audio": "hexa.ogg",
+		"preview": 0
+	},
+	"timings": [],
+	"effects": [],
+	"notes": []
 }

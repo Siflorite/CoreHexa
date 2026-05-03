@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CoreHexa"
-run/main_scene="uid://ixwxm72oa1ax"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 boot_splash/stretch_mode=2
 boot_splash/image="uid://bsfnmibo4syfa"
@@ -38,3 +38,7 @@ project/assembly_name="CoreHexa"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+
+[autoload]
+
+GameState="*res://scripts/autoload/game_state.gd"

@@ -99,7 +99,7 @@ class ChartData:
 		return meta.audio if not meta.audio.is_empty() else ""
 	
 	func get_audio_offset() -> float:
-		return timing_points[0].time
+		return timing_points[0].time if not timing_points.is_empty() else 0
 	
 	func get_background_filename() -> String:
 		return meta.background if not meta.background.is_empty() else ""

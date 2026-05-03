@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://ixwxm72oa1ax"]
-
-[ext_resource type="Script" uid="uid://bt7d08rjvm3qa" path="res://scripts/scenes/main_scene.gd" id="1_o5qli"]
-
-[node name="Node2D" type="Node2D" unique_id=160686315]
-script = ExtResource("1_o5qli")
-chart_path = null
-scroll_time = null
