@@ -85,11 +85,6 @@ func load_chart() -> void:
 
 
 func load_skin() -> void:
-	skin_data = SkinLoader.load_skin(skin_path)
-	if skin_data == null:
-		push_error("皮肤加载失败")
-		return
-
 	column_pos.resize(6)
 	single_head_textures.resize(6)
 	single_sizes.resize(6)
@@ -103,6 +98,11 @@ func load_skin() -> void:
 	ln_tail_textures.resize(6)
 	ln_tail_sizes.resize(6)
 	ln_tail_z_indexes.resize(6)
+	
+	skin_data = SkinLoader.load_skin(skin_path)
+	if skin_data == null:
+		push_error("皮肤加载失败")
+		return
 
 	for column in skin_data.columns:
 		var idx: int = column.index
@@ -131,11 +131,13 @@ func load_skin() -> void:
 		ln_head_z_indexes[idx] = column.long_head.z_index
 
 		ln_body_textures[idx] = column.long_body.texture
-		ln_body_sizes[idx] = Vector2(column.long_body.width, 0)
+		var long_body_width: float = column.long_body.width if column.long_body.width > 0 else column.width
+		ln_body_sizes[idx] = Vector2(long_body_width, 0)
 		ln_body_z_indexes[idx] = column.long_body.z_index
 
 		ln_tail_textures[idx] = column.long_tail.texture
-		ln_tail_sizes[idx] = Vector2(column.long_tail.width, column.long_tail.height)
+		var long_tail_width: float = column.long_tail.width if column.long_tail.width > 0 else column.width
+		ln_tail_sizes[idx] = Vector2(long_tail_width, column.long_tail.height)
 		ln_tail_z_indexes[idx] = column.long_tail.z_index
 
 	for module in skin_data.customs:
@@ -169,8 +171,8 @@ func setup_ui() -> void:
 	keep_size_nodes.append(time_label)
 
 	# 设置背景
-	var bg_width: float = skin_data.background.width if skin_data.background.width > 0  else DESIGN_WIDTH
-	var bg_height: float = skin_data.background.height if skin_data.background.height > 0  else DESIGN_HEIGHT
+	var bg_width: float = skin_data.background.width if skin_data and skin_data.background.width > 0  else DESIGN_WIDTH
+	var bg_height: float = skin_data.background.height if skin_data and skin_data.background.height > 0  else DESIGN_HEIGHT
 
 	var background_rect: TextureRect = null
 	if skin_data != null:
@@ -180,8 +182,12 @@ func setup_ui() -> void:
 			skin_data.background.texture = background
 		background_rect = skin_data.background.generate()
 	elif background != null:
+		background_rect = TextureRect.new()
 		background_rect.texture = background
+		background_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		background_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		background_rect.size = Vector2(bg_width, bg_height)
+		background_rect.z_index = -1
 	if background_rect != null:
 		keep_size_nodes.append(background_rect)
 		$GameArea.add_child(background_rect)
@@ -245,12 +251,13 @@ func generate_note(note_data: HexaType.NoteData) -> Note:
 func generate_new_notes(audio_time: float) -> void:
 	for i in range(index, chart_data.notes.size()):
 		var note_data: HexaType.NoteData = chart_data.notes[i]
+		var delta_y: float = column_pos[note_data.column].y - DESIGN_HEIGHT
 		if note_data.time < audio_time + scroll_time + RENDER_ADVANCE_TIME:
 			var note: Note = generate_note(note_data)
 			# 确定Note的初始位置
 			var x_pos: float = column_pos[note_data.column].x + note.head_target_size.x / 2
 			# 计算Y位置，需要根据变速计算出视觉位置，不过这里就先随便弄弄
-			var y_pos: float = (audio_time - note_data.time + scroll_time) / scroll_time * DESIGN_HEIGHT
+			var y_pos: float = (audio_time - note_data.time + scroll_time) / scroll_time * DESIGN_HEIGHT + delta_y
 			note.position = Vector2(x_pos, y_pos)
 			$GameArea.add_child(note)
 			existing_notes.append(note)	
@@ -265,6 +272,8 @@ func update_existing_notes(audio_time: float) -> void:
 	var still_existing_notes: Array[Note] = []
 	for note in existing_notes:
 		var exist_time: float = 0.0 # 物件留存时间点，对于单键就是time，长键就是end_time
+		var judge_y: float = column_pos[note.column].y
+		var delta_y: float = judge_y - DESIGN_HEIGHT
 		if note is LongNote:
 			exist_time = note.end_time
 		else:
@@ -276,12 +285,12 @@ func update_existing_notes(audio_time: float) -> void:
 			# print("curtime: ", audio_time, ", notetime: ", note.time, ", etime: ", exist_time)
 		else:
 			# 调整当前note的y坐标
-			var target_y: float = (audio_time - note.time + scroll_time) / scroll_time * DESIGN_HEIGHT
+			var target_y: float = (audio_time - note.time + scroll_time) / scroll_time * DESIGN_HEIGHT + delta_y
 			note.position.y = target_y
 			if note is LongNote:
 				if note.time < audio_time and note.end_time > audio_time:
 					# 一个特性，在长键头部低于判定区，尾部还没到判定区时，将头部固定在判定位置，未来可能拓展为皮肤控制
-					note.set_head_position_y(DESIGN_HEIGHT - target_y)
+					note.set_head_position_y(judge_y - target_y)
 			still_existing_notes.append(note)
 	existing_notes = still_existing_notes
 

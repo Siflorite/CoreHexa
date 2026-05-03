@@ -5,5 +5,6 @@
 [node name="Node2D" type="Node2D" unique_id=160686315]
 script = ExtResource("1_o5qli")
 chart_path = "res://charts/melodiniq/melodiniq.json"
+skin_path = "res://skins/sdvx/skin.json"
 
 [node name="GameArea" type="Node2D" parent="." unique_id=376313598]

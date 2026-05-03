@@ -159,3 +159,157 @@ fn main() {
     let skin_data_json = serde_json::to_string_pretty(&skin_data).unwrap();
     std::fs::write("skin.json", skin_data_json).unwrap();
 }
+
+#[cfg(test)]
+pub mod tests{
+    use crate::*;
+    #[test]
+    fn generate_bar_skin() {
+        let columns = (0..6).map(|i| {
+            let color_idx = match i {
+                0 | 2 | 3 | 5 => { 1 },
+                _ => { 2 },
+            };
+            Column {
+                index: i as u8,
+                image: Image { 
+                    texture: None, 
+                    x: Some((200 + i * 120) as f32), 
+                    y: Some(1080.0), 
+                    width: Some(120.0),
+                    ..Default::default()
+                },
+                single: Image { 
+                    texture: Some(format!("res://textures/hit_objects/note{color_idx}.png")), 
+                    height: Some(40.0), 
+                    z_index: 3,
+                    ..Default::default()
+                },
+                long_head: Image { 
+                    texture: Some(format!("res://textures/hit_objects/note{color_idx}.png")), 
+                    height: Some(40.0), 
+                    z_index: 3,
+                    ..Default::default()
+                },
+                long_body: Image { 
+                    texture: Some(format!("res://textures/hit_objects/note{color_idx}.png")), 
+                    width: Some(120.0), 
+                    z_index: 2,
+                    ..Default::default()
+                },
+                long_tail: Image { 
+                    texture: Some(format!("res://textures/hit_objects/note{color_idx}.png")), 
+                    width: Some(120.0), 
+                    height: Some(40.0), 
+                    z_index: 1,
+                    ..Default::default()
+                }
+            }
+        }).collect::<Vec<_>>();
+
+        let customs = vec![
+            CustomField::Rect(Rect { 
+                color: Some("#FFFFFF".into()), 
+                x: 200.0, 
+                y: 1060.0, 
+                width: 720.0, 
+                height: 20.0, 
+                alpha: 1.0, 
+                z_index: 0
+            })
+        ];
+
+        let skin_data = SkinData {
+            name: "Default Skin (Bar)".into(),
+            author: "Team Monokhrom".into(),
+            version: "v1".into(),
+            background: Image {
+                x: Some(0.0),
+                y: Some(0.0),
+                width: Some(1920.0),
+                height: Some(1080.0),
+                z_index: -1,
+                ..Default::default()
+            },
+            columns,
+            customs,
+        };
+        let skin_data_json = serde_json::to_string_pretty(&skin_data).unwrap();
+        std::fs::write("bar_skin.json", skin_data_json).unwrap();
+    }
+
+    #[test]
+    fn generate_strange_skin() {
+        let columns = (0..6).map(|i| {
+            let color_idx = match i {
+                0 | 2 | 3 | 5 => { 1 },
+                _ => { 2 },
+            };
+            Column {
+                index: i as u8,
+                image: Image { 
+                    texture: None, 
+                    x: Some((200 + i * 120 + i * 40) as f32), 
+                    y: Some(1080.0 - i as f32 * 40.0), 
+                    width: Some(120.0 + i as f32 * 20.0),
+                    ..Default::default()
+                },
+                single: Image { 
+                    texture: Some(format!("res://textures/hit_objects/note{color_idx}.png")), 
+                    height: Some(40.0 + i as f32 * 10.0), 
+                    z_index: 3,
+                    ..Default::default()
+                },
+                long_head: Image { 
+                    texture: Some(format!("res://textures/hit_objects/note{color_idx}.png")), 
+                    height: Some(40.0 + i as f32 * 5.0), 
+                    z_index: 3,
+                    ..Default::default()
+                },
+                long_body: Image { 
+                    texture: Some(format!("res://textures/hit_objects/note{color_idx}.png")), 
+                    width: Some(120.0 - i as f32 * 10.0), 
+                    z_index: 2,
+                    ..Default::default()
+                },
+                long_tail: Image { 
+                    texture: Some(format!("res://textures/hit_objects/note{color_idx}.png")), 
+                    width: Some(120.0 - i as f32 * 5.0), 
+                    height: Some(40.0 + i as f32 * 15.0), 
+                    z_index: 1,
+                    ..Default::default()
+                }
+            }
+        }).collect::<Vec<_>>();
+
+        let customs = vec![
+            CustomField::Rect(Rect { 
+                color: Some("#FFFFFF".into()), 
+                x: 200.0, 
+                y: 1060.0, 
+                width: 720.0, 
+                height: 20.0, 
+                alpha: 1.0, 
+                z_index: 0
+            })
+        ];
+
+        let skin_data = SkinData {
+            name: "Test Skin".into(),
+            author: "Team Monokhrom".into(),
+            version: "v1".into(),
+            background: Image {
+                x: Some(0.0),
+                y: Some(0.0),
+                width: Some(1920.0),
+                height: Some(1080.0),
+                z_index: -1,
+                ..Default::default()
+            },
+            columns,
+            customs,
+        };
+        let skin_data_json = serde_json::to_string_pretty(&skin_data).unwrap();
+        std::fs::write("test_skin.json", skin_data_json).unwrap();
+    }
+}

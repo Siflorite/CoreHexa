@@ -1,0 +1,117 @@
+{
+  "name": "SDVX",
+  "author": "Team Monokhrom",
+  "version": "v1",
+  "background": {
+	"x": 0.0,
+	"y": 0.0,
+	"width": 1920.0,
+	"height": 1080.0,
+	"z_index": -1
+  },
+  "columns": [
+	{
+	  "index": 0,
+	  "x": 585.0,
+	  "y": 1080.0,
+	  "width": 150,
+	  "z_index": 0,
+	  "single": {
+		"texture": "res://textures/hit_objects/note1.png",
+		"height": 40.0,
+		"z_index": 4
+	  },
+	  "long_body": {
+		"texture": "res://textures/hit_objects/note1.png",
+		"width": 150.0,
+		"z_index": 3
+	  }
+	},
+	{
+	  "index": 1,
+	  "x": 785.0,
+	  "y": 1080.0,
+	  "width": 150,
+	  "z_index": 0,
+	  "single": {
+		"texture": "res://textures/hit_objects/note1.png",
+		"height": 40.0,
+		"z_index": 4
+	  },
+	  "long_body": {
+		"texture": "res://textures/hit_objects/note1.png",
+		"width": 150.0,
+		"z_index": 3
+	  }
+	},
+	{
+	  "index": 2,
+	  "x": 560.0,
+	  "y": 1080.0,
+	  "width": 400.0,
+	  "z_index": 0,
+	  "single": {
+		"texture": "res://textures/hit_objects/note2.png",
+		"height": 40.0,
+		"z_index": 2
+	  },
+	  "long_body": {
+		"texture": "res://textures/hit_objects/note2.png",
+		"width": 400.0,
+		"z_index": 1
+	  }
+	},
+	{
+	  "index": 4,
+	  "x": 985.0,
+	  "y": 1080.0,
+	  "width": 150,
+	  "z_index": 0,
+	  "single": {
+		"texture": "res://textures/hit_objects/note1.png",
+		"height": 40.0,
+		"z_index": 2
+	  },
+	  "long_body": {
+		"texture": "res://textures/hit_objects/note1.png",
+		"width": 150.0,
+		"z_index": 1
+	  }
+	},
+	{
+	  "index": 5,
+	  "x": 1185.0,
+	  "y": 1080.0,
+	  "width": 150.0,
+	  "z_index": 0,
+	  "single": {
+		"texture": "res://textures/hit_objects/note1.png",
+		"height": 40.0,
+		"z_index": 2
+	  },
+	  "long_body": {
+		"texture": "res://textures/hit_objects/note1.png",
+		"width": 150.0,
+		"z_index": 1
+	  }
+	},
+	{
+	  "index": 3,
+	  "x": 960.0,
+	  "y": 1080.0,
+	  "width": 400.0,
+	  "z_index": 0,
+	  "single": {
+		"texture": "res://textures/hit_objects/note2.png",
+		"height": 40.0,
+		"z_index": 2
+	  },
+	  "long_body": {
+		"texture": "res://textures/hit_objects/note2.png",
+		"width": 400.0,
+		"z_index": 1
+	  }
+	}
+  ],
+  "customs": []
+}

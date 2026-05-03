@@ -98,10 +98,10 @@ impl From<OsuDataLegacy> for HexaData {
 }
 
 fn main() {
-    let chart = "charts/onoken a.k.a. owltree - Melodiniq (TwilightDawnLi) [[22] Linked VERSE FINALE].osu";
+    let chart = "charts/Use SDVX Skin to play - SDVX Simulation Pack #10 (_IceRain) [(22) iLLness LiLin].osu";
     let chart_osu_data = OsuDataLegacy::from_file(chart).unwrap();
     // println!("{:?}", chart_osu_data);
     let chart_hexa_data = HexaData::from(chart_osu_data);
     let chart_hexa_data_json = serde_json::to_string_pretty(&chart_hexa_data).unwrap();
-    std::fs::write("melodiniq.json", chart_hexa_data_json).unwrap();
+    std::fs::write("lilin.json", chart_hexa_data_json).unwrap();
 }
